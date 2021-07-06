@@ -38,6 +38,8 @@ public class Sprite {
   public void display() {
     image(image, x, y, imageWidth, imageHeight);
   }
+  
+  //can we change this?
   public void move() {
     x = x + vx;
     y = y + vy;
