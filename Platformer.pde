@@ -8,6 +8,7 @@ public void setup() {
 
   size(800, 600);
   p = new Sprite(50, 300, loadImage("data/Ron.png"), 2); 
+  imageMode(CENTER);
   // eve = new Sprite(40, 500, 1, -2, loadImage("data/eve.png"), 3); 
   rightKeyPressed = false; 
   leftKeyPressed = false;
