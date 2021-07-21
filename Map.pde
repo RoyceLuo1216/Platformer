@@ -21,6 +21,14 @@ public class Map{
       ...
     ]
     
+    [  2      ] <--- values
+    [        ]
+    [        ]
+    [        ]
+    [        ]
+    [        ]
+    [   2     ] <--- "2"
+    
     */
     for(int r = 0; r < lines.length; r = r + 1){
       String[] values = lines[r].split(",");
@@ -29,13 +37,36 @@ public class Map{
         // x = size/2 + c * size
         // y = size/2 + r * size
         // if values[c] == 1, 2, 3, 4 ... make the corresponding tile Sprite
-        if (values[c] == "1") {
+        float x = SPRITE_SIZE/2 + c * SPRITE_SIZE;
+        float y = SPRITE_SIZE/2 + r * SPRITE_SIZE; 
+        // when you print something == something java thinks you are comparing the location of two tiems instead of the actual value. This is only true for comparing strings. Where you have to use ".equals" 
+        if (values[c].equals("1")) {
           Sprite block = new Sprite(x, y, grassMC, SCALE);
           platforms.add(block);
+        }
+        if (values[c].equals("2")){
+          Sprite block = new Sprite (x,y, normalGrass, SCALE); 
+          platforms.add(block);
+        }
+        if (values[c].equals("3")) {
+          Sprite block = new Sprite (x,y, plastic, SCALE); 
+           platforms.add(block);
+
+        }
+        if (values [c].equals( "4")){
+        Sprite block = new Sprite (x,y, wood, SCALE);
+        platforms.add(block);
+
         }
       }
     }
   }
-  
+  //looping through each of the platforms with the list generated with the previous function to display each of the blocks in our game 
+  public void display(){
+
+    for (Sprite block: platforms){
+      block.display(); 
+    }
+  }
   
 }

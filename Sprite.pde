@@ -14,6 +14,8 @@ public class Sprite {
 
 
 
+
+
   //constructors 
   public Sprite(float x, float y, PImage image, float scale) { 
     this.x = x;
@@ -38,10 +40,36 @@ public class Sprite {
   public void display() {
     image(image, x, y, imageWidth, imageHeight);
   }
-  
+
   //can we change this?
   public void move() {
     x = x + vx;
     y = y + vy;
   }
+  
+  // top = y - h/2
+  public float getTop() {
+    return y - imageHeight/2;
+  }
+  public float getBottom() {
+    return y + imageHeight/2;
+  }
+  public float getLeft() {
+    return x - imageWidth/2;
+  }
+  public float getRight() {
+    return x + imageWidth/2;
+  }
+  // y = top + h/2
+  public void setTop(float top) {
+    y = top + imageHeight/2;
+  }
+  public void setBottom(float bottom){
+    y = bottom - imageHeight/2;
+  }
+  public void setRight(float right){
+    x = right - imageWidth/2
+  }
+  public void setLeft(float left){
+    x = left + imageWidth/2 
 }
