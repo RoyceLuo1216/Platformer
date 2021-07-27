@@ -11,6 +11,7 @@ public class Sprite {
   private float imageWidth; 
   private PImage image; 
   private final float MOVE_SPEED = 2; 
+  private final float GRAVITY = 9.8; //: ' ) 
 
 
 
@@ -42,11 +43,16 @@ public class Sprite {
   }
 
   //can we change this?
-  public void move() {
+  public void movex() {
     x = x + vx;
-    y = y + vy;
   }
-  
+  public void movey() {
+    vy = vy + GRAVITY; 
+    y = y + vy;
+    
+  }
+
+
   // top = y - h/2
   public float getTop() {
     return y - imageHeight/2;
@@ -64,12 +70,13 @@ public class Sprite {
   public void setTop(float top) {
     y = top + imageHeight/2;
   }
-  public void setBottom(float bottom){
+  public void setBottom(float bottom) {
     y = bottom - imageHeight/2;
   }
-  public void setRight(float right){
-    x = right - imageWidth/2
+  public void setRight(float right) {
+    x = right - imageWidth/2;
   }
-  public void setLeft(float left){
-    x = left + imageWidth/2 
+  public void setLeft(float left) {
+    x = left + imageWidth/2;
+  }
 }
