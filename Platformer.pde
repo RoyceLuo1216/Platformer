@@ -3,11 +3,12 @@
 Sprite p;
 boolean rightKeyPressed; 
 boolean leftKeyPressed; 
+final float JUMP_SPEED = 11;
 Map map; 
 //note v stands for velocity
 public void setup() {
 
-  size(800, 600);
+  size(800,600);
   p = new Sprite(50, 300, loadImage("data/Ron.png"), 2); 
   map = new Map ("data/map.csv");
   imageMode(CENTER);
@@ -22,7 +23,7 @@ public void draw() {
 
 
   p.display();
-  p.move();
+  resolvePlatformCollisions(p, map.platforms);
 }
 
 public void keyPressed() {
@@ -34,6 +35,9 @@ public void keyPressed() {
     leftKeyPressed = true;
     // } else if (key == ' ') {
     //  p.setMovement(MOVE_SPEED * -3);
+  }
+  if (keyCode== UP && jumpAbillity(p, map.platforms)){
+    p.jump();
   }
 }
 
@@ -83,3 +87,62 @@ public ArrayList<Sprite> checkCollisionList(Sprite player, ArrayList<Sprite> pla
   }
   return collisionList;
 }
+
+/*
+platforms = [all the platforms]
+collisionList = [only the platforms colliding with the player]
+*/
+
+
+public void resolvePlatformCollisions(Sprite player, ArrayList<Sprite> platforms) {
+  p.movey(); 
+  ArrayList<Sprite> collisionListY = checkCollisionList(player,platforms);
+  for (int cy = 0; cy < collisionListY.size(); cy++){//cy++ is the shorthand form of cy = cy + 1) {
+    if (p.vy < 0) {
+      player.setTop(collisionListY.get(cy).getBottom());
+    }
+    if (p.vy > 0) {
+      player.setBottom(collisionListY.get(cy).getTop()); 
+      p.vy = 0;
+    }
+  }
+  p.movex();
+  ArrayList<Sprite> collisionListX = checkCollisionList(player, platforms);
+  for (int cx = 0; cx < collisionListX.size(); cx++) {
+    if (p.vx < 0) {
+      player.setLeft(collisionListX.get(cx).getRight());
+    }
+    if (p.vx > 0) {
+      player.setRight(collisionListX.get(cx).getLeft());
+    }
+  }
+}
+/*
+Write a void function named resolvePlatformCollisions that takes a player sprite and a list of sprites (platforms).
+ The function should perform the following steps:
+ 
+ 1. move the player vertically
+ 2. compute the list of all platforms that collide with the player
+ 3. if our list is not empty:
+ if player is moving up:
+ set player.top = collidedPlatform.bottom
+ if player is moving down:
+ set player.bottom = collidedPlatform.top
+ 4. set player's vY to be 0 to prevent the player from falling more
+ 
+ 5. move the player horizontally
+ 6. compute the list of all platforms that collide with the player
+ 7. if our list is not empty:
+ if player is moving right:
+ set player's right edge equal to the platform's left edge
+ if player is moving left:
+ set player's left edge equal to the platform's right edge
+ */
+ 
+ public boolean jumpAbillity(Sprite player, ArrayList<Sprite> platforms){
+   p.setBottom(p.getBottom()+1);
+   ArrayList<Sprite> feetToSurface = checkCollisionList(player, platforms); 
+   p.setBottom(p.getBottom()-1);
+   return (feetToSurface.size()>0);
+ }
+ 

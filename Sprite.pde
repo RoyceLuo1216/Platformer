@@ -10,8 +10,8 @@ public class Sprite {
   private float imageHeight; 
   private float imageWidth; 
   private PImage image; 
-  private final float MOVE_SPEED = 2; 
-  private final float GRAVITY = 9.8; //: ' ) 
+  private final float MOVE_SPEED = 4; 
+  private final float GRAVITY = 0.6; //: ' ) 
 
 
 
@@ -37,6 +37,10 @@ public class Sprite {
 
   public void stopMovementX() {
     vx = 0;
+  }
+  
+  public void jump(){
+    vy = -JUMP_SPEED;
   }
   public void display() {
     image(image, x, y, imageWidth, imageHeight);
