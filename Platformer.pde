@@ -3,13 +3,22 @@
 Sprite p;
 boolean rightKeyPressed; 
 boolean leftKeyPressed; 
-final float JUMP_SPEED = 11;
+final float JUMP_SPEED = 14;
+final float MARGIN_LEFT = 100;
+final float MARGIN_RIGHT = 400;
+final float MARGIN_TOP = 200;
+final float MARGIN_BOT  = 200;
+float viewX;
+float viewY;
 Map map; 
+
 //note v stands for velocity
 public void setup() {
 
-  size(800,600);
+  size(800, 600);
   p = new Sprite(50, 300, loadImage("data/Ron.png"), 2); 
+  viewX =  0;
+  viewY = 0; 
   map = new Map ("data/map.csv");
   imageMode(CENTER);
   // eve = new Sprite(40, 500, 1, -2, loadImage("data/eve.png"), 3); 
@@ -19,11 +28,11 @@ public void setup() {
 
 public void draw() {
   background(255);
-  map.display();
-
-
+  scroll();
+  map.display();  
   p.display();
   resolvePlatformCollisions(p, map.platforms);
+  
 }
 
 public void keyPressed() {
@@ -36,7 +45,7 @@ public void keyPressed() {
     // } else if (key == ' ') {
     //  p.setMovement(MOVE_SPEED * -3);
   }
-  if (keyCode== UP && jumpAbillity(p, map.platforms)){
+  if (keyCode== UP && jumpAbillity(p, map.platforms)) {
     p.jump();
   }
 }
@@ -90,14 +99,14 @@ public ArrayList<Sprite> checkCollisionList(Sprite player, ArrayList<Sprite> pla
 
 /*
 platforms = [all the platforms]
-collisionList = [only the platforms colliding with the player]
-*/
+ collisionList = [only the platforms colliding with the player]
+ */
 
 
 public void resolvePlatformCollisions(Sprite player, ArrayList<Sprite> platforms) {
   p.movey(); 
-  ArrayList<Sprite> collisionListY = checkCollisionList(player,platforms);
-  for (int cy = 0; cy < collisionListY.size(); cy++){//cy++ is the shorthand form of cy = cy + 1) {
+  ArrayList<Sprite> collisionListY = checkCollisionList(player, platforms);
+  for (int cy = 0; cy < collisionListY.size(); cy++) {//cy++ is the shorthand form of cy = cy + 1) {
     if (p.vy < 0) {
       player.setTop(collisionListY.get(cy).getBottom());
     }
@@ -138,11 +147,40 @@ Write a void function named resolvePlatformCollisions that takes a player sprite
  if player is moving left:
  set player's left edge equal to the platform's right edge
  */
- 
- public boolean jumpAbillity(Sprite player, ArrayList<Sprite> platforms){
-   p.setBottom(p.getBottom()+1);
-   ArrayList<Sprite> feetToSurface = checkCollisionList(player, platforms); 
-   p.setBottom(p.getBottom()-1);
-   return (feetToSurface.size()>0);
- }
- 
+
+public boolean jumpAbillity(Sprite player, ArrayList<Sprite> platforms) {
+  p.setBottom(p.getBottom()+1);
+  ArrayList<Sprite> feetToSurface = checkCollisionList(player, platforms); 
+  p.setBottom(p.getBottom()-1);
+  return (feetToSurface.size()>0);
+}
+
+public void scroll() {
+  if (p.getRight() > getRightBorder()){
+    viewX = viewX + p.getRight() - getRightBorder();
+  }
+  if (p.getLeft() < getLeftBorder()){
+    viewX = viewX - getLeftBorder( ) + p.getLeft();
+  }
+ if (p.getTop() < getTopBorder()){
+  viewY = viewY  - getTopBorder() + p.getTop();
+  }
+  if (p.getBottom() > getBotBorder()){
+    viewY = viewY + p.getBottom() - getBotBorder();
+  }
+   
+translate(-viewX, -viewY);
+
+}
+public float getRightBorder(){
+  return (viewX+width-MARGIN_RIGHT); 
+}
+public float getLeftBorder(){
+  return (viewX + MARGIN_LEFT);
+}
+public float getTopBorder(){
+  return (viewY + MARGIN_TOP);
+}
+public float getBotBorder(){
+  return (viewY + height - MARGIN_BOT);
+}
