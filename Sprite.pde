@@ -55,6 +55,10 @@ public class Sprite {
     y = y + vy;
     
   }
+  
+  public void setVelocityX(float vx){
+    this.vx = vx;
+  }
 
 
   // top = y - h/2
