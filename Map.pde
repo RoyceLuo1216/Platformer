@@ -9,19 +9,42 @@ public class Map {
   //use this function to code in coins 
 
   public Map(String file) {
+<<<<<<< HEAD
+=======
+    //loading in blocks for the game
+>>>>>>> 8f0e85cfd28fd38ec2c9f8e972b4120df41587db
     PImage grassMC = loadImage("data/MCGrass.png");
     PImage normalGrass = loadImage("data/fakeGrass.png");
     PImage plastic = loadImage("data/Plastic.png");
     PImage wood = loadImage("data/wood.png"); 
+<<<<<<< HEAD
   //  PImage guy = loadImage("data/guy1.png");
   //  PImage guy2 = loadImage("data/guy2.png");
+=======
+
+
+    //  PImage guy = loadImage("data/guy1.png");
+    //  PImage guy2 = loadImage("data/guy2.png");
+>>>>>>> 8f0e85cfd28fd38ec2c9f8e972b4120df41587db
     //PImage guy3 = loadImage("data/guy3.png");
     platforms = new ArrayList<Sprite>();
+    coins = new ArrayList<AnimatedSprite>(); 
+
     String[] lines = loadStrings(file);    //ArrayList <String>
+<<<<<<< HEAD
     ArrayList<PImage> guyArray = new ArrayList<PImage>(); 
     guyArray.add(guy);
     guyArray.add(guy2);
     guyArray.add(guy3);
+=======
+    //adding coins to the image array.
+
+
+    // ArrayList<PImage> guyArray = new ArrayList<PImage>(); 
+    /* guyArray.add(guy);
+     guyArray.add(guy2);
+     guyArray.add(guy3);*/
+>>>>>>> 8f0e85cfd28fd38ec2c9f8e972b4120df41587db
 
     /* lines = [
      "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -39,7 +62,11 @@ public class Map {
      [   2     ] <--- "2"
      
      */
+<<<<<<< HEAD
       for (int r = 0; r < lines.length; r = r + 1) {
+=======
+    for (int r = 0; r < lines.length; r = r + 1) {
+>>>>>>> 8f0e85cfd28fd38ec2c9f8e972b4120df41587db
       String[] values = lines[r].split(",");
       for (int c = 0; c < values.length; c = c + 1) {
         // we have access to the variable r, and the variable c
@@ -64,6 +91,7 @@ public class Map {
         if (values [c].equals( "4")) {
           Sprite block = new Sprite (x, y, wood, SCALE);
           platforms.add(block);
+<<<<<<< HEAD
         }
    /*     if (values [c].equals ("5")){
           Sprite guys = new AnimatedSprite (x,y, guyArray.get(0), 0.5, 5, guyArray, guyArray, guyArray); 
@@ -81,4 +109,29 @@ public class Map {
       block.display();
     }
   }
+=======
+        }
+        if (values [c].equals ("5")) {
+          AnimatedSprite coin = new Coin (x, y); 
+          coins.add(coin);
+          System.out.println("made gus : D");
+        }
+
+
+
+        //looping through each of the platforms with the list generated with the previous function to display each of the blocks in our game 
+       
+      }
+    }
+  }
+   public void display() {
+
+          for (Sprite block : platforms) {
+            block.display();
+          }
+          for (Sprite coin : coins) {
+            coin.display();
+          }
+        }
+>>>>>>> 8f0e85cfd28fd38ec2c9f8e972b4120df41587db
 }
