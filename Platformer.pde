@@ -1,6 +1,6 @@
 //Sprite ron;
 //Sprite eve; 
-Sprite p;
+Player p;
 boolean rightKeyPressed; 
 boolean leftKeyPressed; 
 final float JUMP_SPEED = 14;
@@ -8,6 +8,7 @@ final float MARGIN_LEFT = 100;
 final float MARGIN_RIGHT = 400;
 final float MARGIN_TOP = 200;
 final float MARGIN_BOT  = 200;
+int coinCount;
 float viewX;
 float viewY;
 Map map; 
@@ -16,7 +17,7 @@ Map map;
 public void setup() {
 
   size(800, 600);
-  p = new Sprite(50, 300, loadImage("data/Ron.png"), 2); 
+  p = new Player(50, 300, 0.75, 10); 
   viewX =  0;
   viewY = 0; 
   map = new Map ("data/map.csv");
@@ -24,6 +25,7 @@ public void setup() {
   // eve = new Sprite(40, 500, 1, -2, loadImage("data/eve.png"), 3); 
   rightKeyPressed = false; 
   leftKeyPressed = false;
+  coinCount = 0;
 }
 
 public void draw() {
@@ -31,21 +33,27 @@ public void draw() {
   scroll();
   map.display();  
   p.display();
+  displayText();
   resolvePlatformCollisions(p, map.platforms);
+  collectCoins();
   
 }
 
 public void keyPressed() {
   if (keyCode == RIGHT) {
     p.setMovementRight();
+    p.isLookingRight = true; 
+    p.isLookingLeft =false;
     rightKeyPressed = true;
   } else if (keyCode == LEFT) {
     p.setMovementLeft();
+    p.isLookingLeft = true;
+    p.isLookingRight = false;
     leftKeyPressed = true;
     // } else if (key == ' ') {
     //  p.setMovement(MOVE_SPEED * -3);
   }
-  if (keyCode== UP && jumpAbillity(p, map.platforms)) {
+  if (keyCode== UP && jumpAbility(p, map.platforms)) {
     p.jump();
   }
 }
@@ -55,6 +63,8 @@ public void keyReleased() {
     rightKeyPressed = false;
     if (leftKeyPressed) {
       p.setMovementLeft();
+      p.isLookingLeft = true;
+      p.isLookingRight = false;
     } else {
       p.stopMovementX();
     }
@@ -62,6 +72,8 @@ public void keyReleased() {
     leftKeyPressed = false;
     if (rightKeyPressed) {
       p.setMovementRight();
+      p.isLookingRight = true;
+      p.isLookingLeft = false;
     } else {
       p.stopMovementX();
     }
@@ -107,21 +119,21 @@ public void resolvePlatformCollisions(Sprite player, ArrayList<Sprite> platforms
   p.movey(); 
   ArrayList<Sprite> collisionListY = checkCollisionList(player, platforms);
   for (int cy = 0; cy < collisionListY.size(); cy++) {//cy++ is the shorthand form of cy = cy + 1) {
-    if (p.vy < 0) {
+    if (p.getVelocityY() < 0) {
       player.setTop(collisionListY.get(cy).getBottom());
     }
-    if (p.vy > 0) {
+    if (p.getVelocityY() > 0) {
       player.setBottom(collisionListY.get(cy).getTop()); 
-      p.vy = 0;
+      p.setVelocityY(0);
     }
   }
   p.movex();
   ArrayList<Sprite> collisionListX = checkCollisionList(player, platforms);
   for (int cx = 0; cx < collisionListX.size(); cx++) {
-    if (p.vx < 0) {
+    if (p.getVelocityX() < 0) {
       player.setLeft(collisionListX.get(cx).getRight());
     }
-    if (p.vx > 0) {
+    if (p.getVelocityX() > 0) {
       player.setRight(collisionListX.get(cx).getLeft());
     }
   }
@@ -148,7 +160,7 @@ Write a void function named resolvePlatformCollisions that takes a player sprite
  set player's left edge equal to the platform's right edge
  */
 
-public boolean jumpAbillity(Sprite player, ArrayList<Sprite> platforms) {
+public boolean jumpAbility(Sprite player, ArrayList<Sprite> platforms) {
   p.setBottom(p.getBottom()+1);
   ArrayList<Sprite> feetToSurface = checkCollisionList(player, platforms); 
   p.setBottom(p.getBottom()-1);
@@ -183,4 +195,21 @@ public float getTopBorder(){
 }
 public float getBotBorder(){
   return (viewY + height - MARGIN_BOT);
+}
+
+public void displayText(){
+  fill(0,0,0);
+  textSize(12);
+  text("Coins:"+coinCount, viewX + 700, viewY+50); 
+  text("Lives:"+p.lives, viewX+50, viewY+50);
+  
+}
+
+public void collectCoins(){
+  ArrayList<Sprite> collectedCoins = checkCollisionList(p, map.coins);
+  for( Sprite coin: collectedCoins){ // same as: for i in range(collectedCoins); map.coins.remove(i);
+    coinCount++;
+    map.coins.remove(coin); //removing the current item in the list
+    
+  }
 }

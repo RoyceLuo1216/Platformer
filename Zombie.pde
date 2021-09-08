@@ -3,7 +3,7 @@ public class Zombie extends AnimatedSprite {
   private float boundaryRight;
 
   public Zombie (float x, float y, float boundaryLeft, float boundaryRight) {
-    super (x, y, loadImage("data/ZombieWalkRight0.png"), 0.5, 8);  
+    super (x, y, loadImage("data/ZombieWalkRight0.png"), 0.25, 8);  
     rightImages = new ArrayList<PImage>() {
       {
         add(loadImage("data/ZombieWalkRight0.png"));
@@ -34,6 +34,15 @@ public class Zombie extends AnimatedSprite {
   }
   public void display() {
     super.movex();
+    
+    if(getLeft() < boundaryLeft){
+      setLeft(boundaryLeft);
+      setVelocityX(2);
+    }
+    if (getRight()> boundaryRight){
+      setRight(boundaryRight);
+      setVelocityX(-2);
+    }
     /* after the zombie moves x, we check boundaries, we check if the getleft is equal or less than the boundaries setleft, 
     we have to flip the velocity x to move the zombie to the right. Once it hits the other boundary we would flip the velcity again
     */

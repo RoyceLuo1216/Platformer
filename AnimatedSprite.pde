@@ -3,8 +3,8 @@ public class AnimatedSprite extends Sprite {
   public ArrayList<PImage> neutralImages; 
   public ArrayList<PImage> leftImages; 
   public ArrayList<PImage> rightImages; 
-  private int index; 
-  private int frame; 
+  public int index; 
+  public int frame; 
   private int frameRate; 
 
   //constructors 
@@ -24,6 +24,13 @@ public class AnimatedSprite extends Sprite {
   public void updateAnimation() {
     frame = (frame + 1) % frameRate;
     if (frame == 0) {
+      selectCurrentImages();
+      index = (index + 1) % currentImages.size();
+      super.image = currentImages.get(index);
+    }
+  }
+  
+  public void selectCurrentImages(){
       if (super.vx == 0) {
         currentImages = neutralImages;
       }
@@ -33,9 +40,6 @@ public class AnimatedSprite extends Sprite {
       if (super.vx < 0) {
         currentImages = leftImages;
       }
-      index = (index + 1) % currentImages.size();
-      super.image = currentImages.get(index);
-    }
   }
   public void display() {
     super.display();

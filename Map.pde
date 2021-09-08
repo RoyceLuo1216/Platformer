@@ -5,7 +5,8 @@ public class Map {
   final static float SCALE = SPRITE_SIZE/ORIGINAL_IMAGE_SIZE; 
 
   private ArrayList<Sprite> platforms; 
-  private ArrayList<AnimatedSprite> coins; 
+  private ArrayList<Sprite> coins; 
+  private ArrayList<Sprite> zombies;
   //use this function to code in coins 
 
   public Map(String file) {
@@ -20,7 +21,8 @@ public class Map {
     //  PImage guy2 = loadImage("data/guy2.png");
     //PImage guy3 = loadImage("data/guy3.png");
     platforms = new ArrayList<Sprite>();
-    coins = new ArrayList<AnimatedSprite>(); 
+    coins = new ArrayList<Sprite>(); 
+    zombies = new ArrayList<Sprite>();
 
     String[] lines = loadStrings(file);    //ArrayList <String>
     //adding coins to the image array.
@@ -76,7 +78,10 @@ public class Map {
         if (values [c].equals ("5")) {
           AnimatedSprite coin = new Coin (x, y); 
           coins.add(coin);
-          System.out.println("made gus : D");
+        }
+        if (values [c].equals ("6")){
+          AnimatedSprite zombie = new Zombie (x,y, x-100, x+100);
+          zombies.add(zombie);
         }
 
 
@@ -93,6 +98,9 @@ public class Map {
           }
           for (Sprite coin : coins) {
             coin.display();
+          }
+          for (Sprite zombie: zombies){
+            zombie.display();
           }
         }
 }
