@@ -7,7 +7,8 @@ public class Player extends AnimatedSprite {
   private ArrayList<PImage> standRight;
   private ArrayList<PImage> jumpLeft;
   private ArrayList<PImage> jumpRight; 
-
+  private ArrayList<PImage> deathImages; 
+ 
   public Player(float x, float y, float scale, int frameRate) {
 
     super (x, y, loadImage("guy1.png"), scale, frameRate);
@@ -53,11 +54,19 @@ public class Player extends AnimatedSprite {
 
       }
     };
+    deathImages = new ArrayList<PImage>(){{
+      add(loadImage("data/deathImage.png"));
+    }};
     currentImages = standRight;
+    
   }
   public void selectCurrentImages() {
+ 
     onPlatform = jumpAbility(this, map.platforms);
     //  inPlace = onPlatform && getVelocityX() == 0;
+    //add a new branch to check for death animation, and should be at the top.
+    if (isDead) 
+    currentImages = deathImages;
 
     if (onPlatform) {
       if (getVelocityX() == 0) {

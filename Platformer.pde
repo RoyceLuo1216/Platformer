@@ -8,6 +8,10 @@ final float MARGIN_LEFT = 100;
 final float MARGIN_RIGHT = 400;
 final float MARGIN_TOP = 200;
 final float MARGIN_BOT  = 200;
+final static float SPRITE_SIZE = 50;
+final static float ORIGINAL_IMAGE_SIZE =18; 
+final static float SCALE = SPRITE_SIZE/ORIGINAL_IMAGE_SIZE; 
+float groundLevel; 
 int coinCount;
 float viewX;
 float viewY;
@@ -26,6 +30,7 @@ public void setup() {
   rightKeyPressed = false; 
   leftKeyPressed = false;
   coinCount = 0;
+  groundLevel = height;
 }
 
 public void draw() {
@@ -36,7 +41,7 @@ public void draw() {
   displayText();
   resolvePlatformCollisions(p, map.platforms);
   collectCoins();
-  
+  deathCondition();
 }
 
 public void keyPressed() {
@@ -168,48 +173,81 @@ public boolean jumpAbility(Sprite player, ArrayList<Sprite> platforms) {
 }
 
 public void scroll() {
-  if (p.getRight() > getRightBorder()){
+  if (p.getRight() > getRightBorder()) {
     viewX = viewX + p.getRight() - getRightBorder();
   }
-  if (p.getLeft() < getLeftBorder()){
+  if (p.getLeft() < getLeftBorder()) {
     viewX = viewX - getLeftBorder( ) + p.getLeft();
   }
- if (p.getTop() < getTopBorder()){
-  viewY = viewY  - getTopBorder() + p.getTop();
+  if (p.getTop() < getTopBorder()) {
+    viewY = viewY  - getTopBorder() + p.getTop();
   }
-  if (p.getBottom() > getBotBorder()){
+  if (p.getBottom() > getBotBorder()) {
     viewY = viewY + p.getBottom() - getBotBorder();
   }
-   
-translate(-viewX, -viewY);
 
+  translate(-viewX, -viewY);
 }
-public float getRightBorder(){
-  return (viewX+width-MARGIN_RIGHT); 
+public float getRightBorder() {
+  return (viewX+width-MARGIN_RIGHT);
 }
-public float getLeftBorder(){
+public float getLeftBorder() {
   return (viewX + MARGIN_LEFT);
 }
-public float getTopBorder(){
+public float getTopBorder() {
   return (viewY + MARGIN_TOP);
 }
-public float getBotBorder(){
+public float getBotBorder() {
   return (viewY + height - MARGIN_BOT);
 }
 
-public void displayText(){
-  fill(0,0,0);
+public void displayText() {
+  fill(0, 0, 0);
   textSize(12);
   text("Coins:"+coinCount, viewX + 700, viewY+50); 
   text("Lives:"+p.lives, viewX+50, viewY+50);
+}
+
+public void collectCoins() {
+  ArrayList<Sprite> collectedCoins = checkCollisionList(p, map.coins);
+  for ( Sprite coin : collectedCoins) { // same as: for i in range(collectedCoins); map.coins.remove(i);
+    coinCount++;
+    map.coins.remove(coin); //removing the current item in the list
+  }
+}
+
+public void deathCondition() {
+  if (fellOffPlatform() || zombieCollision()) {
+    p.lives--;
+  }
+}
+public boolean gameOver() {
+  if(p.lives == 0){
+ // deathAnimation();
+ /*have a 7th type of array in the player class, like the jumping ones, filled with pictures for death animation. 
+ Add another boolean to player class "isDead". Have to have another case, of "deathImages()' If "isDead" currentImages()= deadImages(). */
+  return true;
+}
+return false;
+}
+
+public boolean fellOffPlatform() {
+  if (p.getBottom() > groundLevel){
+    p.setLeft(100);
+    p.setBottom(height - SPRITE_SIZE);
+    return true;
+  }
+  return false; 
+  
   
 }
 
-public void collectCoins(){
-  ArrayList<Sprite> collectedCoins = checkCollisionList(p, map.coins);
-  for( Sprite coin: collectedCoins){ // same as: for i in range(collectedCoins); map.coins.remove(i);
-    coinCount++;
-    map.coins.remove(coin); //removing the current item in the list
-    
+public boolean zombieCollision() {
+  if (p.isInvisible) return false;
+  ArrayList<Sprite> zombieCollisions = checkCollisionList(p, map.zombies);
+  if (zombieCollisions.size()>0) {
+    p.iFrames = 80; 
+    return true;
   }
+  return false;
 }
