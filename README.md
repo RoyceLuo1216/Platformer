@@ -1,0 +1,1 @@
+This is a basic platformer game that I worked on over a summer. It represents my first attempt at trying to create something through a full software development process and my first real forray into using Java to code something.
